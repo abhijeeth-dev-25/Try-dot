@@ -25,4 +25,9 @@ export const env = {
   // Custom Remote Servers
   CUSTOM_MCP_URL: process.env.CUSTOM_MCP_URL || "",
   CUSTOM_API_KEY: process.env.CUSTOM_API_KEY || "",
+
+  // Tavily Live Web Search MCP
+  TAVILY_API_KEY: process.env.TAVILY_API_KEY || "",
+  TAVILY_MCP_URL: process.env.TAVILY_MCP_URL || "",
 };
+

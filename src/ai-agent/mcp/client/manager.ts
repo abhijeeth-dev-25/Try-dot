@@ -1,6 +1,7 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { createStdioTransport } from "../transports/stdioTransport.ts";
 import { createSSETransport } from "../transports/sseTransport.ts";
+import { createHTTPTransport } from "../transports/httpTransport.ts";
 import { validateServerConfig } from "../config/servers.ts";
 import type {
   MCPServerConfig,
@@ -58,6 +59,11 @@ export class NativeMCPManager {
       });
     } else if (config.transport === "sse") {
       transport = createSSETransport({
+        url: config.url,
+        headers: config.headers || {},
+      });
+    } else if (config.transport === "http" || config.transport === "streamable-http") {
+      transport = createHTTPTransport({
         url: config.url,
         headers: config.headers || {},
       });

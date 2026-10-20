@@ -50,6 +50,23 @@ async function main() {
       console.log(chalk.green("✔ Result received from MCP server:"));
       console.log(chalk.white(JSON.stringify(result, null, 2)));
     }
+
+    // 4. Test Tavily search if available
+    const tavilyTool = tools.find((t) => t.name === "tavily__tavily_search");
+    if (tavilyTool) {
+      console.log(chalk.yellow("\n⚡ Test executing 'tavily__tavily_search' on the web..."));
+      const result = await manager.callTool("tavily__tavily_search", {
+        query: "What is the latest news about AI in 2026?",
+        max_results: 2,
+      });
+
+      console.log(chalk.green("✔ Web search results received from Tavily MCP:"));
+      if (Array.isArray(result?.content)) {
+        result.content.forEach((c: any) => console.log(chalk.white(c.text || JSON.stringify(c))));
+      } else {
+        console.log(chalk.white(JSON.stringify(result, null, 2)));
+      }
+    }
   } catch (error) {
     console.error(chalk.red("✖ MCP Execution Error:"), error);
   } finally {

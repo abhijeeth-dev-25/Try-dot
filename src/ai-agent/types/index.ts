@@ -1,4 +1,4 @@
-export type MCPTransportType = "stdio" | "sse";
+export type MCPTransportType = "stdio" | "sse" | "http" | "streamable-http";
 
 export interface MCPStdioConfig {
   transport: "stdio";
@@ -15,7 +15,14 @@ export interface MCPSSEConfig {
   enabled?: boolean;
 }
 
-export type MCPServerConfig = MCPStdioConfig | MCPSSEConfig;
+export interface MCPHttpConfig {
+  transport: "http" | "streamable-http";
+  url: string;
+  headers?: Record<string, string>;
+  enabled?: boolean;
+}
+
+export type MCPServerConfig = MCPStdioConfig | MCPSSEConfig | MCPHttpConfig;
 
 export type MCPServersConfigMap = Record<string, MCPServerConfig>;
 

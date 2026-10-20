@@ -87,6 +87,21 @@ export const mcpServersConfig: MCPServersConfigMap = {
     },
     enabled: Boolean(env.CUSTOM_API_KEY && env.CUSTOM_MCP_URL),
   },
+
+  // =========================================================================
+  // 3. REMOTE STREAMABLE HTTP SERVERS (Modern MCP HTTP POST/Streaming)
+  // =========================================================================
+
+  // Tavily Live Web Search MCP
+  tavily: {
+    transport: "http",
+    url:
+      env.TAVILY_MCP_URL ||
+      (env.TAVILY_API_KEY
+        ? `https://mcp.tavily.com/mcp/?tavilyApiKey=${env.TAVILY_API_KEY}`
+        : "https://mcp.tavily.com/mcp/"),
+    enabled: Boolean(env.TAVILY_API_KEY || env.TAVILY_MCP_URL),
+  },
 };
 
 /**
@@ -99,7 +114,7 @@ export function validateServerConfig(
   if (!config.transport) {
     return {
       valid: false,
-      reason: `Server "${serverName}" is missing "transport" property ("stdio" or "sse").`,
+      reason: `Server "${serverName}" is missing "transport" property ("stdio", "sse", or "http").`,
     };
   }
 
@@ -137,6 +152,15 @@ export function validateServerConfig(
       return {
         valid: false,
         reason: `Missing required Authorization token for SSE server "${serverName}".`,
+      };
+    }
+  }
+
+  if (config.transport === "http" || config.transport === "streamable-http") {
+    if (!config.url) {
+      return {
+        valid: false,
+        reason: `HTTP server "${serverName}" is missing "url".`,
       };
     }
   }
